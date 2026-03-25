@@ -32,7 +32,8 @@ def _load_libs():
     from langchain_text_splitters import RecursiveCharacterTextSplitter    
     from langchain_openai import OpenAIEmbeddings, ChatOpenAI
     from langchain_community.vectorstores import FAISS
-    from langchain.chains import RetrievalQA
+    from langchain_core.output_parsers import StrOutputParser
+    from langchain_core.runnables import RunnablePassthrough
     from langchain_core.prompts import PromptTemplate
     return (
         PyPDFLoader, RecursiveCharacterTextSplitter,
