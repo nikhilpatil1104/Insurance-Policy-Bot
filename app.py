@@ -1,10 +1,21 @@
-import streamlit as st
 import os
+import streamlit as st
 import tempfile
 from pathlib import Path
 
-api_key = os.getenv("OPENAI_API_KEY") or st.secrets.get("OPENAI_API_KEY", "")
+try:
+    secret_key = st.secrets.get("OPENAI_API_KEY", "")
+except Exception:
+    secret_key = ""
 
+api_key = st.text_input(
+    "API Key",
+    value=os.getenv("OPENAI_API_KEY", "") or secret_key,
+    type="password",
+    placeholder="sk-...",
+    help="Your key is used only in-session and never stored.",
+    label_visibility="collapsed",
+) or secret_key
 
 # ── Page config ────────────────────────────────────────────────────────────────
 st.set_page_config(
