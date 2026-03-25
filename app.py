@@ -1,21 +1,10 @@
-import os
 import streamlit as st
+import os
 import tempfile
 from pathlib import Path
 
-try:
-    secret_key = st.secrets.get("OPENAI_API_KEY", "")
-except Exception:
-    secret_key = ""
+api_key = os.getenv("OPENAI_API_KEY") or st.secrets.get("OPENAI_API_KEY", "")
 
-api_key = st.text_input(
-    "API Key",
-    value=os.getenv("OPENAI_API_KEY", "") or secret_key,
-    type="password",
-    placeholder="sk-...",
-    help="Your key is used only in-session and never stored.",
-    label_visibility="collapsed",
-) or secret_key
 
 # ── Page config ────────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -29,12 +18,11 @@ st.set_page_config(
 @st.cache_resource(show_spinner=False)
 def _load_libs():
     from langchain_community.document_loaders import PyPDFLoader
-    from langchain_text_splitters import RecursiveCharacterTextSplitter    
+    from langchain_text_splitters import RecursiveCharacterTextSplitter
     from langchain_openai import OpenAIEmbeddings, ChatOpenAI
     from langchain_community.vectorstores import FAISS
-    from langchain_core.output_parsers import StrOutputParser
-    from langchain_core.runnables import RunnablePassthrough
-    from langchain_core.prompts import PromptTemplate
+    from langchain.chains import RetrievalQA
+    from langchain.prompts import PromptTemplate
     return (
         PyPDFLoader, RecursiveCharacterTextSplitter,
         OpenAIEmbeddings, ChatOpenAI, FAISS, RetrievalQA, PromptTemplate,
@@ -288,14 +276,6 @@ def build_vectorstore(pdf_bytes: bytes, api_key: str, chunk_size: int, chunk_ove
             separators=["\n\n", "\n", ". ", " ", ""],
         )
         chunks = splitter.split_documents(pages)
-
-        # CLEAN METADATA (important fix)
-        for chunk in chunks:
-            chunk.metadata = {
-                k: str(v) for k, v in chunk.metadata.items()
-                if isinstance(v, (str, int, float, bool))
-            }
-
 
         embeddings = OpenAIEmbeddings(
             model="text-embedding-3-small",
