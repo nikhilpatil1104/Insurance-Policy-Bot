@@ -1,10 +1,8 @@
 streamlit>=1.35.0
-pypdf
-openai
-tiktoken
 langchain==0.2.16
 langchain-community==0.2.16
 langchain-openai==0.1.23
-langchain-text-splitters==0.2.2
-langchain-core
-faiss-cpu
+faiss-cpu>=1.8.0
+pypdf>=4.0.0
+openai>=1.30.0
+tiktoken>=0.7.0
