@@ -3,7 +3,7 @@ import os
 import tempfile
 from pathlib import Path
 
-api_key = os.getenv("OPENAI_API_KEY")
+api_key = os.getenv("OPENAI_API_KEY") or st.secrets.get("OPENAI_API_KEY", "")
 
 
 # ── Page config ────────────────────────────────────────────────────────────────
