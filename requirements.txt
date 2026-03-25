@@ -2,9 +2,9 @@ streamlit>=1.35.0
 pypdf
 openai
 tiktoken
-langchain==0.2.16 `
-langchain-community==0.2.16 `
-langchain-openai==0.1.23 `
-langchain-text-splitters==0.2.2 `
+langchain==0.2.16
+langchain-community
+langchain-openai
+langchain-text-splitters
 langchain-core
 faiss-cpu
