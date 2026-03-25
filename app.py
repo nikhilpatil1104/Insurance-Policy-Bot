@@ -289,6 +289,14 @@ def build_vectorstore(pdf_bytes: bytes, api_key: str, chunk_size: int, chunk_ove
         )
         chunks = splitter.split_documents(pages)
 
+        # CLEAN METADATA (important fix)
+        for chunk in chunks:
+            chunk.metadata = {
+                k: str(v) for k, v in chunk.metadata.items()
+                if isinstance(v, (str, int, float, bool))
+            }
+
+
         embeddings = OpenAIEmbeddings(
             model="text-embedding-3-small",
             openai_api_key=api_key,
